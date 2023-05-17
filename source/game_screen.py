@@ -1,4 +1,4 @@
-import arcade, random
+import arcade, random, math
 from constant import *
 from star import *
 from bullet import *
@@ -13,17 +13,15 @@ class MyGame(arcade.Window):
     def __init__(self, width, height, title):
 
         # Call the parent class and set up the window
-        super().__init__(width, height, title, resizable=True)
+        super().__init__(width, height, title)
         
         arcade.set_background_color(arcade.color.BLACK)
-        
-        self.width = width
-        self.height = height
 
         # The lists that keep track of all sprites. Each sprite will 
         # go into a list.
         self.player_list = None
         self.bullet_list = None
+        self.mouse_bullet_list = None
         self.rock_list = None
         self.star_list = None
                 
@@ -38,68 +36,70 @@ class MyGame(arcade.Window):
         self.right_pressed = False
         self.up_pressed = False
         self.down_pressed = False
-            
+        
     def setup(self):
         """Set up the game here. Call this function to restart the game."""
         # Create the Sprite lists
         self.player_list = arcade.SpriteList()
         self.bullet_list = arcade.SpriteList()
+        self.mouse_bullet_list = arcade.SpriteList()
         self.rock_list = arcade.SpriteList()
         self.star_list = arcade.SpriteList()
         
         # This camera is used to display any GUI element (score, etc.)
         self.gui_camera = arcade.Camera(self.width, self.height)
 
-        # Track score
-        self.score = 0
-
         # Set up the ship
         player_ship_image = ":resources:images/space_shooter/playerShip1_blue.png"
-        self.player_sprite = Ship(player_ship_image, CHARACTER_SCALING)
+        self.player_sprite = Ship(player_ship_image,
+                                  SHIP_SCALING,
+                                  self.width,
+                                  self.height,
+                                  )
         self.player_list.append(self.player_sprite)   
-                
-        # call star function
-        self.add_star()
         
         # make rock appear every second
         arcade.schedule(self.add_rock, 0.8)
         
-    def on_resize(self, width, height):
-        """ This method is  called when the window is resized. """
-
-        super().on_resize(width, height)
+        # call star function
+        self.add_star()
     
     def draw_score(self):
-        score_text = f"Score: {self.score}"
+        score_text = f"Score: {self.player_score}"
         arcade.draw_text(score_text, 10, 10, arcade.csscolor.WHITE, 20)
-            
+    
+    def hit_list (self, sprite_list):
+        for bullet in sprite_list:
+            rock_hit_list1 = arcade.check_for_collision_with_list(\
+                bullet, self.rock_list)
+
+            # If bullet hit rock, remove it
+            if len(rock_hit_list1) > 0:
+                bullet.remove_from_sprite_lists()
+ 
+            # For every rock hit, add to the score and also remove it
+            self.remove_rock(rock_hit_list1) 
+              
+            # If the bullet flies from screen remove it
+            if bullet.bottom > self.width or bullet.top < 0 \
+                or bullet.right < 0 or bullet.left > self.width:
+                bullet.remove_from_sprite_lists()
+                
     def shoot(self):
         """Called when space pressed to shoot"""
-        # Set up the bullet  
+        # Set up the bullet, only allow maximum so that spam cannot occur
         bullet_image = ":resources:images/space_shooter/laserRed01.png"
-        self.bullet_sprite = Bullet(bullet_image, BULLET_SCALING)
-        
-        self.bullet_sprite.center_x = self.player_sprite.center_x
-        self.bullet_sprite.bottom = self.player_sprite.top
+        if len(self.bullet_list) < MAX_180_BULLETS:
+            self.bullet_sprite = Bullet(bullet_image, BULLET_SCALING)
+            
+            self.bullet_sprite.center_x = self.player_sprite.center_x
+            self.bullet_sprite.bottom = self.player_sprite.top
 
-        self.bullet_list.append(self.bullet_sprite)
+            self.bullet_list.append(self.bullet_sprite)
 
     def on_shoot(self):
-        for bullet in self.bullet_list:
-            rock_hit_list = arcade.check_for_collision_with_list(\
-                bullet, self.rock_list)
-            
-            # If bullet hit rock, remove it
-            if len(rock_hit_list) > 0:
-                bullet.remove_from_sprite_lists()
-
-            # For every rock hit, add to the score and also remove it
-            self.remove_rock(rock_hit_list)
-                                    
-            # If the bullet flies from screen remove it
-            if bullet.bottom > self.height:
-                bullet.remove_from_sprite_lists()
-
+        self.hit_list(self.bullet_list) 
+        self.hit_list(self.mouse_bullet_list)
 
     def add_rock(self, deltatime: float):
         # Create the rock
@@ -123,7 +123,7 @@ class MyGame(arcade.Window):
     def remove_rock(self, rock_hit_list):
         for rock in rock_hit_list:
             rock.remove_from_sprite_lists()
-            self.score += SCORE_INCREASE
+            self.player_score += SCORE_INCREASE
             
             # play rock explosion sound
             explosion_select = random.randint(0,1)
@@ -149,7 +149,6 @@ class MyGame(arcade.Window):
         for star in self.star_list:
             # Remove star when it is past the screen
             if star.bottom < 0:
-                print(self.width, self.height)
                 star.reset(self.width, self.width)
 
     def on_draw(self):
@@ -162,6 +161,7 @@ class MyGame(arcade.Window):
         self.star_list.draw()
         self.rock_list.draw()
         self.bullet_list.draw()
+        self.mouse_bullet_list.draw()
         self.player_list.draw()
         
         # This will activate the camera in order to draw to GUI
@@ -176,71 +176,109 @@ class MyGame(arcade.Window):
         self.star_list.update()
         self.rock_list.update()
         self.bullet_list.update()
+        self.mouse_bullet_list.update()
         self.player_list.update()
                     
         # if bullet is shot
-        if self.bullet_list:  
+        if self.bullet_list or self.mouse_bullet_list:  
             self.on_shoot()
         
         # move star to top of screen
         self.recycle_star()
         
+        self.update_player_location()
+        
     def update_player_location(self):
-
+        """Move player ship. Code copied from 
+        https://api.arcade.academy/en/latest/examples/sprite_move_keyboard_accel.html"""
         # Calculate speed based on the keys pressed
-        self.player_sprite.change_x = 0
-        self.player_sprite.change_y = 0
+        if self.player_sprite.change_x > PLAYER_SHIP_DRAG:
+            self.player_sprite.change_x -= PLAYER_SHIP_DRAG
+        elif self.player_sprite.change_x < -PLAYER_SHIP_DRAG:
+            self.player_sprite.change_x += PLAYER_SHIP_DRAG
+        else:
+            self.player_sprite.change_x = 0
 
-        # If gone out of bounds this will bring the ship back
-        if self.player_sprite.left < 0:
-            self.player_sprite.left = 0
-        elif self.player_sprite.right > self.width - 1:
-            self.player_sprite.right = self.width
-        if self.player_sprite.bottom < 0:
-            self.player_sprite.bottom = 0
-        elif self.player_sprite.top > self.height - 1:
-            self.player_sprite.top = self.height
-
-        # Moves the ship by a certain amount
+        if self.player_sprite.change_y > PLAYER_SHIP_DRAG:
+            self.player_sprite.change_y -= PLAYER_SHIP_DRAG
+        elif self.player_sprite.change_y < -PLAYER_SHIP_DRAG:
+            self.player_sprite.change_y += PLAYER_SHIP_DRAG
+        else:
+            self.player_sprite.change_y = 0
+            
         if self.up_pressed and not self.down_pressed:
-            self.player_sprite.change_y = PLAYER_MOVEMENT_SPEED
+            self.player_sprite.change_y += PLAYER_ACCEL
         elif self.down_pressed and not self.up_pressed:
-            self.player_sprite.change_y = -PLAYER_MOVEMENT_SPEED
+            self.player_sprite.change_y += -PLAYER_ACCEL
         if self.left_pressed and not self.right_pressed:
-            self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
+            self.player_sprite.change_x += -PLAYER_ACCEL
         elif self.right_pressed and not self.left_pressed:
-            self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED   
+            self.player_sprite.change_x += PLAYER_ACCEL
 
+        if self.player_sprite.change_x > PLAYER_SHIP_MAX_SPEED:
+            self.player_sprite.change_x = PLAYER_SHIP_MAX_SPEED
+        elif self.player_sprite.change_x < -PLAYER_SHIP_MAX_SPEED:
+            self.player_sprite.change_x = -PLAYER_SHIP_MAX_SPEED
+        if self.player_sprite.change_y > PLAYER_SHIP_MAX_SPEED:
+            self.player_sprite.change_y = PLAYER_SHIP_MAX_SPEED
+        elif self.player_sprite.change_y < -PLAYER_SHIP_MAX_SPEED:
+            self.player_sprite.change_y = -PLAYER_SHIP_MAX_SPEED
+
+    def on_mouse_press(self, x, y, button, modifiers):
+        """ Called whenever the mouse button is clicked. Code referenced from
+        https://api.arcade.academy/en/latest/examples/sprite_bullets_aimed.html#sprite-bullets-aimed
+        """
+        if len (self.mouse_bullet_list) < MAX_MOUSE_BULLETS:
+            bullet = Bullet(":resources:images/space_shooter/laserBlue01.png", BULLET_SCALING)
+            # Create a bullet and position it at player ship
+            start_x = self.player_sprite.center_x
+            start_y = self.player_sprite.center_y
+            bullet.center_x = start_x
+            bullet.center_y = start_y
+
+            # Get the mouse the destination location for the bullet
+            dest_x = x
+            dest_y = y
+
+            # Do math to calculate how to get the bullet to the destination and 
+            # calculate the angle
+            x_diff = dest_x - start_x
+            y_diff = dest_y - start_y
+            angle = math.atan2(y_diff, x_diff)
+
+            # Angle the bullet sprite so it goes head on
+            bullet.angle = math.degrees(angle)
+
+            # Take the angle and send it by the speed
+            bullet.change_x = math.cos(angle) * SHIP_BULLET_SPEED
+            bullet.change_y = math.sin(angle) * SHIP_BULLET_SPEED
+
+            self.mouse_bullet_list.append(bullet)
+            
     def on_key_press(self, key, modifiers):
-        """Called whenever a key is pressed"""
+        """Called whenever a key is pressed. Reference from 
+        https://api.arcade.academy/en/latest/examples/sprite_move_keyboard_better.html"""
+
 
         if key == arcade.key.UP or key == arcade.key.W:
             self.up_pressed = True
-            self.update_player_location()
         elif key == arcade.key.DOWN or key == arcade.key.S:
             self.down_pressed = True
-            self.update_player_location()
         elif key == arcade.key.LEFT or key == arcade.key.A:
             self.left_pressed = True
-            self.update_player_location()
         elif key == arcade.key.RIGHT or key == arcade.key.D:
             self.right_pressed = True
-            self.update_player_location()
         elif key == arcade.key.SPACE:
             self.shoot() 
             
     def on_key_release(self, key, modifiers):
-        """Called when the user releases a key"""
-
+        """Called whenever a key is released. Reference from 
+        https://api.arcade.academy/en/latest/examples/sprite_move_keyboard_better.html"""
         if key == arcade.key.UP or key == arcade.key.W:
             self.up_pressed = False
-            self.update_player_location()
         elif key == arcade.key.DOWN or key == arcade.key.S:
             self.down_pressed = False
-            self.update_player_location()
         elif key == arcade.key.LEFT or key == arcade.key.A:
             self.left_pressed = False
-            self.update_player_location()
         elif key == arcade.key.RIGHT or key == arcade.key.D:
             self.right_pressed = False
-            self.update_player_location()
