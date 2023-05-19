@@ -4,8 +4,9 @@ from star import *
 from bullet import *
 from ship import *
 from rock import *
+from main_screen import *
 
-class MyGame(arcade.Window):
+class GameView(arcade.View):
     """
     Main application class.
     """
@@ -13,7 +14,7 @@ class MyGame(arcade.Window):
     def __init__(self, width, height, title):
 
         # Call the parent class and set up the window
-        super().__init__(width, height, title)
+        super().__init__()
         
         arcade.set_background_color(arcade.color.BLACK)
 
@@ -24,6 +25,9 @@ class MyGame(arcade.Window):
         self.mouse_bullet_list = None
         self.rock_list = None
         self.star_list = None
+        
+        self.width = width
+        self.height = height
                 
         # This camera is used to display any GUI element (score, etc.)
         self.gui_camera = None
