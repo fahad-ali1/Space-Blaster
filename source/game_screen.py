@@ -1,4 +1,7 @@
-import arcade, random, math
+import arcade
+import random
+import math
+
 from constant import *
 from star import *
 from bullet import *
@@ -6,15 +9,40 @@ from ship import *
 from rock import *
 from main_screen import *
 
-class GameView(arcade.View):
-    """
-    Main application class.
-    """
 
-    def __init__(self, width, height, title):
+class GameOverView(arcade.View):
+    """ Class that manages game over view """
+    
+    def __init__(self, window: Window = None):
+        super().__init__(window)
+        
+    def on_show(self):
+        arcade.set_background_color(arcade.color.BLACK)
+
+    def on_draw(self):
+        self.clear()
+        # Draw game over screen
+        arcade.draw_text("Game Over", SCREEN_WIDTH/2, SCREEN_HEIGHT * 0.5,\
+            arcade.color.WHITE, font_size=60, anchor_x="center")
+        arcade.draw_text("Click anywhere to restart", SCREEN_WIDTH/2, \
+            SCREEN_HEIGHT * 0.5 - 60, arcade.color.WHITE, font_size=25,\
+                anchor_x="center") 
+        arcade.draw_text(f"Total score = {self.window.total_score}", SCREEN_WIDTH/2, \
+            SCREEN_HEIGHT * 0.5 - 120, arcade.color.WHITE, font_size=25,\
+                anchor_x="center") 
+        
+    def on_mouse_press(self, x, y, _button, _modifiers):
+        game_view = GameView(SCREEN_WIDTH, SCREEN_HEIGHT, "Space Blaster")
+        game_view.setup()
+        self.window.show_view(game_view)
+
+class GameView(arcade.View):
+    """ Main application class """
+
+    def __init__(self, width, height, title, window: Window = None):
 
         # Call the parent class and set up the window
-        super().__init__()
+        super().__init__(window)
         
         arcade.set_background_color(arcade.color.BLACK)
 
@@ -34,6 +62,7 @@ class GameView(arcade.View):
         
         # Players score
         self.player_score = 0
+        self.window.total_score = 0
                                 
         # Tracks keys pressed or not
         self.left_pressed = False
@@ -74,15 +103,15 @@ class GameView(arcade.View):
     
     def hit_list (self, sprite_list):
         for bullet in sprite_list:
-            rock_hit_list1 = arcade.check_for_collision_with_list(\
+            rock_hit_list = arcade.check_for_collision_with_list(\
                 bullet, self.rock_list)
 
             # If bullet hit rock, remove it
-            if len(rock_hit_list1) > 0:
+            if len(rock_hit_list) > 0:
                 bullet.remove_from_sprite_lists()
  
             # For every rock hit, add to the score and also remove it
-            self.remove_rock(rock_hit_list1) 
+            self.remove_rock(rock_hit_list) 
               
             # If the bullet flies from screen remove it
             if bullet.bottom > self.width or bullet.top < 0 \
@@ -128,6 +157,7 @@ class GameView(arcade.View):
         for rock in rock_hit_list:
             rock.remove_from_sprite_lists()
             self.player_score += SCORE_INCREASE
+            self.window.total_score += SCORE_INCREASE
             
             # play rock explosion sound
             explosion_select = random.randint(0,1)
@@ -135,7 +165,7 @@ class GameView(arcade.View):
                                 ":resources:sounds/explosion2.wav",
                                 ]
             self.rock_hit_sound = arcade.load_sound(explosion_sounds[explosion_select])
-            arcade.play_sound(self.rock_hit_sound)
+            arcade.play_sound(self.rock_hit_sound, volume=0.5)
 
     def add_star(self):
         # create 50 stars that will be recycled back to top of screen
@@ -175,21 +205,30 @@ class GameView(arcade.View):
         self.draw_score()
                 
     def on_update(self, delta_time):
-        """Movement and game logic, control animations"""             
+        """Movement and game logic, control animations"""
         # Update the lists
         self.star_list.update()
         self.rock_list.update()
         self.bullet_list.update()
         self.mouse_bullet_list.update()
         self.player_list.update()
-                    
-        # if bullet is shot
-        if self.bullet_list or self.mouse_bullet_list:  
+
+        # Check if a bullet is shot
+        if self.bullet_list or self.mouse_bullet_list:
             self.on_shoot()
-        
-        # move star to top of screen
+
+        # Check for collision between player and rocks or if rock goes off the screen
+        for rock in self.rock_list:
+            rock_player_collision = arcade.check_for_collision(rock, self.player_sprite)
+            if rock_player_collision or rock.bottom < 0:
+                # Show the game over view
+                game_over_view = GameOverView()
+                self.window.show_view(game_over_view)
+
+        # Move star to the top of the screen if it goes off the bottom
         self.recycle_star()
-        
+
+        # Update the player's location
         self.update_player_location()
         
     def update_player_location(self):
