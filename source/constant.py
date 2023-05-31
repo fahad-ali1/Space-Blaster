@@ -1,4 +1,5 @@
 import arcade
+
 # Constants for the screen and title
 width, height = arcade.window_commands.get_display_size()
 SCREEN_WIDTH = width-200
