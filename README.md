@@ -20,6 +20,6 @@ Alternatively, you can install arcade library using `pip` with the following com
 pip3 install arcade
 ```
 Please note that in order to use pip in the terminal, it is assumed you have python already installed:
-# Screenshots
-![Space Blaster 2](https://github.com/fahad-ali1/Space-Blaster/assets/97869609/9809557a-66df-4bc0-bb1a-faabcebbaa3c)
+# Game screenshots
+![Space Blaster 2](https://github.com/fahad-ali1/Space-Blaster/assets/97869609/5fb9df92-2fa2-4015-abce-b525af22ba22)
 ![Space Blaster 1](https://github.com/fahad-ali1/Space-Blaster/assets/97869609/939f3d5b-c097-4e69-bcea-a73353e6ea2e)
