@@ -36,7 +36,7 @@ class MenuView(arcade.View):
 
     def __init__(self, window: Window = None):
         self.game_music = arcade.load_sound(":resources:music/1918.mp3")
-        arcade.play_sound(self.game_music,volume=0.3,looping=True)
+        arcade.play_sound(self.game_music,volume=0.3,looping=False)
         
         super().__init__(window)
         self.play_hover = None
