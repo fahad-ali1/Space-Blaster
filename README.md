@@ -2,6 +2,8 @@
 Author: Fahad
 # Description
 Space Blaster is a 2D game created using the very simple to use [arcade library.](https://api.arcade.academy/en/latest/)
+# Jumping right into the game
+Download the repository as a zip file and click the .exe file **(2D Space Blaster.exe)**. You really only need the images folder and the .exe, beside that the rest can be deleted
 # Installation
 Once the game is done development, an executable will be released which will install all dependencies. As of now, a manual installation is required, shown below.
 #
