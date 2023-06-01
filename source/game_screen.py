@@ -165,7 +165,7 @@ class GameView(arcade.View):
                                 ":resources:sounds/explosion2.wav",
                                 ]
             self.rock_hit_sound = arcade.load_sound(explosion_sounds[explosion_select])
-            arcade.play_sound(self.rock_hit_sound, volume=0.5)
+            arcade.play_sound(self.rock_hit_sound, volume=0.15)
 
     def add_star(self):
         # create 50 stars that will be recycled back to top of screen

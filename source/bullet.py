@@ -11,4 +11,4 @@ class Bullet(arcade.Sprite):
         # Load bullet sound
         self.bullet_sound = arcade.load_sound(":resources:sounds/laser3.wav")
         # Play bullet sound
-        arcade.play_sound(self.bullet_sound, volume=0.5)
+        arcade.play_sound(self.bullet_sound, volume=0.15)
