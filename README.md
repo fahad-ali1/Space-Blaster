@@ -2,8 +2,10 @@
 Author: Fahad
 # Description
 Space Blaster is a 2D game created using the very simple to use [arcade library.](https://api.arcade.academy/en/latest/)
+
+Music and images (rocks, ship, and bullet) provided by [Kenney.nl.](https://api.arcade.academy/en/latest/resources.html)
 # Jumping right into the game
-Download the repository as a zip file and click the .exe file **(2D Space Blaster.exe)**. You really only need the images folder and the .exe, beside that the rest can be deleted
+Download the repository as a zip file and click the .exe file **(2D Space Blaster.exe)**. You really only need the images folder and the .exe, beside that the rest can be deleted.
 # Installation
 Once the game is done development, an executable will be released which will install all dependencies. As of now, a manual installation is required, shown below.
 #
@@ -18,3 +20,6 @@ Alternatively, you can install arcade library using `pip` with the following com
 pip3 install arcade
 ```
 Please note that in order to use pip in the terminal, it is assumed you have python already installed:
+# Screenshots
+![Space Blaster 2](https://github.com/fahad-ali1/Space-Blaster/assets/97869609/9809557a-66df-4bc0-bb1a-faabcebbaa3c)
+![Space Blaster 1](https://github.com/fahad-ali1/Space-Blaster/assets/97869609/939f3d5b-c097-4e69-bcea-a73353e6ea2e)
