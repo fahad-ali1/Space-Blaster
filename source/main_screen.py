@@ -14,7 +14,7 @@ class HelpView(arcade.View):
                          arcade.color.WHITE, font_size=90, anchor_x="center")
         
         arcade.draw_text("HOW TO PLAY:\n1. Shoot straight with" 
-                         "space bar\n2. Shoot any where with mouse\n3. Move "
+                         " space bar\n2. Shoot any where with mouse\n3. Move "
                          "around with WASD keys or arrow keys on keyboard\nNOTE: "
                          "You are unable to spam bullets\n\nOBJECTIVE\n- Destroy "
                          "as many rocks as you can\n- No real objective, just "

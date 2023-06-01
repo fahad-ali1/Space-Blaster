@@ -1,5 +1,4 @@
-('C:\\Users\\fahad\\OneDrive\\Documents\\Macewan Documents\\2023 Winter '
- 'Term\\CMPT 395\\Project\\2D-Space-Blaster-\\build\\__main__\\PYZ-00.pyz',
+('C:\\Users\\fahad\\OneDrive\\Documents\\Projects\\Space-Blaster\\build\\__main__\\PYZ-00.pyz',
  [('PIL',
    'C:\\Users\\fahad\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python310\\site-packages\\PIL\\__init__.py',
    'PYMODULE'),
@@ -671,8 +670,7 @@
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\\lib\\bisect.py',
    'PYMODULE'),
   ('bullet',
-   'C:\\Users\\fahad\\OneDrive\\Documents\\Macewan Documents\\2023 Winter '
-   'Term\\CMPT 395\\Project\\2D-Space-Blaster-\\source\\bullet.py',
+   'C:\\Users\\fahad\\OneDrive\\Documents\\Projects\\Space-Blaster\\source\\bullet.py',
    'PYMODULE'),
   ('bz2',
    'C:\\Program '
@@ -773,8 +771,7 @@
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\\lib\\configparser.py',
    'PYMODULE'),
   ('constant',
-   'C:\\Users\\fahad\\OneDrive\\Documents\\Macewan Documents\\2023 Winter '
-   'Term\\CMPT 395\\Project\\2D-Space-Blaster-\\source\\constant.py',
+   'C:\\Users\\fahad\\OneDrive\\Documents\\Projects\\Space-Blaster\\source\\constant.py',
    'PYMODULE'),
   ('contextlib',
    'C:\\Program '
@@ -1061,8 +1058,7 @@
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\\lib\\ftplib.py',
    'PYMODULE'),
   ('game_screen',
-   'C:\\Users\\fahad\\OneDrive\\Documents\\Macewan Documents\\2023 Winter '
-   'Term\\CMPT 395\\Project\\2D-Space-Blaster-\\source\\game_screen.py',
+   'C:\\Users\\fahad\\OneDrive\\Documents\\Projects\\Space-Blaster\\source\\game_screen.py',
    'PYMODULE'),
   ('getopt',
    'C:\\Program '
@@ -1225,8 +1221,7 @@
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\\lib\\lzma.py',
    'PYMODULE'),
   ('main_screen',
-   'C:\\Users\\fahad\\OneDrive\\Documents\\Macewan Documents\\2023 Winter '
-   'Term\\CMPT 395\\Project\\2D-Space-Blaster-\\source\\main_screen.py',
+   'C:\\Users\\fahad\\OneDrive\\Documents\\Projects\\Space-Blaster\\source\\main_screen.py',
    'PYMODULE'),
   ('mimetypes',
    'C:\\Program '
@@ -2701,8 +2696,7 @@
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\\lib\\rlcompleter.py',
    'PYMODULE'),
   ('rock',
-   'C:\\Users\\fahad\\OneDrive\\Documents\\Macewan Documents\\2023 Winter '
-   'Term\\CMPT 395\\Project\\2D-Space-Blaster-\\source\\rock.py',
+   'C:\\Users\\fahad\\OneDrive\\Documents\\Projects\\Space-Blaster\\source\\rock.py',
    'PYMODULE'),
   ('runpy',
    'C:\\Program '
@@ -3329,8 +3323,7 @@
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\\lib\\site-packages\\setuptools\\windows_support.py',
    'PYMODULE'),
   ('ship',
-   'C:\\Users\\fahad\\OneDrive\\Documents\\Macewan Documents\\2023 Winter '
-   'Term\\CMPT 395\\Project\\2D-Space-Blaster-\\source\\ship.py',
+   'C:\\Users\\fahad\\OneDrive\\Documents\\Projects\\Space-Blaster\\source\\ship.py',
    'PYMODULE'),
   ('shlex',
    'C:\\Program '
@@ -3361,8 +3354,7 @@
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\\lib\\ssl.py',
    'PYMODULE'),
   ('star',
-   'C:\\Users\\fahad\\OneDrive\\Documents\\Macewan Documents\\2023 Winter '
-   'Term\\CMPT 395\\Project\\2D-Space-Blaster-\\source\\star.py',
+   'C:\\Users\\fahad\\OneDrive\\Documents\\Projects\\Space-Blaster\\source\\star.py',
    'PYMODULE'),
   ('statistics',
    'C:\\Program '
