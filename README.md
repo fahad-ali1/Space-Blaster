@@ -7,7 +7,7 @@ Music and images (rocks, ship, and bullet) provided by [Kenney.nl.](https://api.
 # Jumping right into the game
 Download the repository as a zip file and click the .exe file **(2D Space Blaster.exe)**. You really only need the images folder and the .exe, beside that the rest can be deleted.
 # Installation
-Once the game is done development, an executable will be released which will install all dependencies. As of now, a manual installation is required, shown below.
+This is only for a manual installation, you can just download the repository as a zip file and click the .exe file.
 #
 Make sure you have `arcade library` and `Python` installed as these are the dependencies. 
 
